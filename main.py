@@ -55,8 +55,6 @@ def get_snippet(param):
     prompt_text_davinci_003(prompt_builder, 0, 100, 1, 0.0, 0.0, ["\n"])
     return
 
-
-# This model's maximum context length is 4097 tokens, by name, by name and dob, by name, dob, and country, about paragraph
 def prompt_text_davinci_003(prompt,temperature=0, max_tokens=60, top_p=1.0, frequency_penalty=0.5, presence_penalty=0.0, stop=None):
     response = openai.Completion.create(
         model="text-davinci-003",
