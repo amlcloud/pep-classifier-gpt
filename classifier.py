@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Spyder Editor
-
 HuyPham - AML CLOUD
 
 PEP classification"
@@ -13,7 +11,7 @@ import openai
 import re
 
 #provide api_key
-openai.api_key = "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"
+openai.api_key = "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"
 
 
 """
@@ -64,16 +62,21 @@ names = sample_names
 
 
 #ask openai to list all people name XYZ and their background
-pep_queries_1 = "List all people named XYZ and their family background"
-query_list.append(pep_queries_1)
+pep_query_1 = "List all people named XYZ and their family background"
+query_list.append(pep_query_1)
 
 #ask openai to judge base on the people information if any of them are political exposed person
-pep_queries_2 = "Who above can be considered as a political exposed person (PEP)?"
-query_list.append(pep_queries_2)
+pep_query_2 = "Who above can be considered as a political exposed person (PEP)?"
+query_list.append(pep_query_2)
+
+pep_query_3 = "If yes, tell me about the person's name and their background"
+query_list.append(pep_query_3)
         
         
 
 #connect with openai to detect pep
 for name in names:
     prompt_handling(name, query_list)
+    print('\n')
+    
     
