@@ -28,41 +28,59 @@ response = openai.Completion.create(
   )
 """
 
-def prompt_handling(name, query_list):
+def prompt_handling(prompt):
+  response = openai.Completion.create(
+    model="text-davinci-003",
+    prompt= prompt,
+    temperature=0,
+    max_tokens=256,
+    top_p=1.0,
+    frequency_penalty=0.0,
+    presence_penalty=0.0
+    )
+  return response.choices[0]["text"].strip()
+
+def pep_by_name(name, query_list):
     prompt = ''
-    for query in query_list:
+    for index, query in enumerate(query_list):
         #each new prompt will be inherited from the previous prompt and the new querry
-        query_adjusted = prompt + "/n" + re.sub("XYZ", name, query)  #replace XYZ with real name if query need to mention real name
+        query_adjusted = response + "/n" + re.sub("XYZ", name, query)  #replace XYZ with real name if query need to mention real name
         
         #callout openai api
-        response = openai.Completion.create(
-          model="text-davinci-003",
-          prompt= query_adjusted,
-          temperature=0,
-          max_tokens=100,
-          top_p=1.0,
-          frequency_penalty=0.0,
-          presence_penalty=0.0
-          )
-        
-        #update prompt based on open ai reponse
-        prompt = response.choices[0]["text"].strip()
-        print(prompt)
+        response = prompt_handling(query_adjusted)
+        print(index, ':', response)
+
+def pep_by_name_categories(name, category_list):
+    for category in category_list:
+      query_adjusted = 'Do you know any {1} named {0}?'.format(name, category)
+      # print(query_adjusted)
+      response = prompt_handling(query_adjusted)
+      print(name, "-", category, "\n", response)
     
-    
-        
 #init prompt querries
 
 
 query_list = [] #create querry list to ask multiple question to openai api
 
-sample_names = ["Anthony Albanese","Jenny Morrison", "Serge Ivo", "Robert Chipman"]
-
+sample_names =["Anthony Albanese"
+,"Jenny Morrison"
+, "Serge Ivo"
+, "Robert Chipman"
+]
 names = sample_names
+
+#PEP categories list
+
+pep_categories =["Senior government officials"
+,"Members of political parties"
+,"Senior executives in government-owned commercial firms or international organisations"
+,"Relatives and close associates to government officials"
+]
 
 
 #ask openai to list all people name XYZ and their background
 pep_query_1 = "List all people named XYZ and their family background"
+
 query_list.append(pep_query_1)
 
 #ask openai to judge base on the people information if any of them are political exposed person
@@ -72,11 +90,20 @@ query_list.append(pep_query_2)
 pep_query_3 = "If yes, tell me about the person's name and their background"
 query_list.append(pep_query_3)
         
+# ##################
+# querying by pep categories
+
+
+###############
         
 
 #connect with openai to detect pep
-for name in names:
-    prompt_handling(name, query_list)
-    print('\n')
-    
+# for name in names:
+#     prompt_handling(name, query_list)
+#     print('\n')
+
+#detect pep with pep categories
+pep_by_name_categories(name = "Jenny Morrison", category_list= pep_categories)
+
+
     
